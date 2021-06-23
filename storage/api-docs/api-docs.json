@@ -1,0 +1,393 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://personal-page-teacher-api.herokuapp.com/api/"
+        },
+        {
+            "url": "http://localhost:8000/api/"
+        }
+    ],
+    "paths": {
+        "/": {},
+        "/files": {
+            "get": {
+                "tags": [
+                    "Файлы"
+                ],
+                "summary": "Файлы пользователя",
+                "operationId": "App\\Http\\Controllers\\Account\\File\\FileController::index",
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    },
+                    "401": {
+                        "description": "Не авторизован"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Файлы"
+                ],
+                "summary": "Загрузка файлов",
+                "operationId": "App\\Http\\Controllers\\Account\\File\\FileController::store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "files[]": {
+                                        "description": "Файлы",
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    },
+                    "401": {
+                        "description": "Не авторизован"
+                    },
+                    "422": {
+                        "description": "Неверные данные"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/files/{userId}": {
+            "get": {
+                "tags": [
+                    "Файлы"
+                ],
+                "summary": "Файлы пользователя для профиля",
+                "operationId": "App\\Http\\Controllers\\Account\\File\\FileController::show",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "ID пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    },
+                    "404": {
+                        "description": "Не найдено"
+                    }
+                }
+            }
+        },
+        "/files/{fileId}": {
+            "put": {
+                "tags": [
+                    "Файлы"
+                ],
+                "summary": "Изменения категории файла",
+                "operationId": "App\\Http\\Controllers\\Account\\File\\FileController::update",
+                "parameters": [
+                    {
+                        "name": "fileId",
+                        "in": "path",
+                        "description": "ID файла",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "category": {
+                                        "type": "string",
+                                        "default": "Остальное",
+                                        "enum": [
+                                            "Остальное",
+                                            "Награды",
+                                            "Методички"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    },
+                    "401": {
+                        "description": "Не авторизован"
+                    },
+                    "404": {
+                        "description": "Не найдено"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Файлы"
+                ],
+                "summary": "Удаление файла",
+                "operationId": "App\\Http\\Controllers\\Account\\File\\FileController::destroy",
+                "parameters": [
+                    {
+                        "name": "fileId",
+                        "in": "path",
+                        "description": "ID файла",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    },
+                    "401": {
+                        "description": "Не авторизован"
+                    },
+                    "404": {
+                        "description": "Не найдено"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Аутентификация"
+                ],
+                "summary": "Выход",
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    },
+                    "401": {
+                        "description": "Не авторизован"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "tags": [
+                    "Аутентификация"
+                ],
+                "summary": "Данные пользователя",
+                "responses": {
+                    "200": {
+                        "description": "Данные пользователя"
+                    },
+                    "401": {
+                        "description": "Не авторизован"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/signin": {
+            "post": {
+                "tags": [
+                    "Аутентификация"
+                ],
+                "summary": "Авторизация пользователя",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "Электронная почта",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Невалидные данные"
+                    },
+                    "200": {
+                        "description": "Пользователь авторизовался"
+                    },
+                    "401": {
+                        "description": "Неверные данные"
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "tags": [
+                    "Аутентификация"
+                ],
+                "summary": "Создание пользователя",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "description": "Имя",
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "description": "Фамилия",
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "description": "Имя пользователя",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Электронная почта",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Пароль",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Невалидные данные"
+                    },
+                    "201": {
+                        "description": "Пользователь создан"
+                    }
+                }
+            }
+        },
+        "/search": {
+            "get": {
+                "tags": [
+                    "Остальное"
+                ],
+                "summary": "Поиск пользователя",
+                "parameters": [
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "description": "Запрос",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    },
+                    "404": {
+                        "description": "Не найдено"
+                    }
+                }
+            }
+        },
+        "/u/{username}": {
+            "get": {
+                "tags": [
+                    "Остальное"
+                ],
+                "summary": "Данные пользователя по его имени",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "Имя пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    },
+                    "404": {
+                        "description": "Не найдено"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "apiAuth": {
+                "type": "http",
+                "description": "Введите токен",
+                "name": "Token based Based",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
